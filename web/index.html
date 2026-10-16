@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10131d">
+  <title>Nova — Voice Assistant</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Nova home"><span class="brand-mark">N</span><span>nova</span></a>
+      <div class="availability"><span class="pulse"></span> Local assistant</div>
+    </header>
+    <section class="chat-panel" aria-label="Nova chat">
+      <div class="welcome" id="welcome">
+        <div class="nova-orb" aria-hidden="true"><span>N</span></div>
+        <p class="eyebrow">YOUR VOICE ASSISTANT</p>
+        <h1>Hi, I’m Nova.</h1>
+        <p class="intro">A simple assistant for everyday questions and quick searches.</p>
+        <div class="suggestions" aria-label="Try asking">
+          <button type="button" class="suggestion">What can you do?</button>
+          <button type="button" class="suggestion">What time is it?</button>
+          <button type="button" class="suggestion">Tell me a joke</button>
+        </div>
+      </div>
+      <div id="messages" class="messages" role="log" aria-live="polite" aria-relevant="additions text"></div>
+      <div id="status" class="status" role="status" aria-live="polite">Ready when you are</div>
+      <form id="chat-form" class="composer">
+        <label class="sr-only" for="message-input">Message Nova</label>
+        <textarea id="message-input" rows="1" maxlength="1000" placeholder="Ask Nova something…" autocomplete="off"></textarea>
+        <button id="mic-button" class="icon-button" type="button" aria-label="Start voice input" title="Voice input"><span aria-hidden="true">🎙</span></button>
+        <button id="send-button" class="send-button" type="submit" aria-label="Send message"><span aria-hidden="true">↑</span></button>
+      </form>
+      <p class="privacy-note">Nova uses local rules, weather and Wikipedia services, and web search links. Unsupported questions are answered honestly.</p>
+    </section>
+  </main>
+</body>
+</html>

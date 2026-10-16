@@ -1,5 +1,7 @@
 # Nova — Desktop Voice Assistant
 
+> **Browser app:** This repository also includes a separate FastAPI web interface. The desktop application remains available through `app.py`; web deployment does not expose the desktop command registry or local computer controls.
+
 Nova is a modular desktop voice assistant designed for Windows. It combines deterministic command routing for local applications and system controls with rule-based offline conversation, dual-mode text/speech synthesis, continuous microphone capture, and strict security isolation.
 
 ---
@@ -169,3 +171,50 @@ The GUI keeps microphone capture, command processing, and speech synthesis off t
    - `pyttsx3` uses Windows SAPI5. When running inside multi-threaded GUI environments, TTS operations are safely executed within worker threads. In rare instances where COM threading conflicts arise, Nova automatically logs the warning and continues via text output.
 5. **Offline conversation**:
    - Nova supports common greetings, help, identity, and a small set of canned responses locally. It cannot answer general knowledge or open-ended questions; use supported desktop commands or web search for information.
+
+---
+
+## 🌐 Browser App (FastAPI)
+
+The browser version runs alongside the Windows desktop app and uses its own minimal web dependencies. It serves a responsive Nova chat interface, browser speech input where supported, and browser speech synthesis. Chat is handled with local rules plus optional weather and Wikipedia lookups. Web searches return a link for you to open. Public endpoints never execute desktop commands, shell commands, or local file operations. Unsupported questions receive a clear offline limitation.
+
+### Run locally (Windows PowerShell)
+
+From the repository root:
+
+```powershell
+python -m venv .venv-web
+.\.venv-web\Scripts\Activate.ps1
+python -m pip install -r requirements-web.txt
+python -m uvicorn webapp:app --host 127.0.0.1 --port 8000
+```
+
+Open <http://127.0.0.1:8000>. Allow microphone access in the browser to use voice input; typed messages work when browser speech recognition is unavailable. Browser speech recognition support varies by browser and can rely on the browser vendor's speech service. Replies use the browser's built-in speech synthesis. The web app does not require a conversational AI API key. Live weather uses the desktop project's optional `OPENWEATHER_API_KEY` only when configured on the server; no key is needed for local replies, Wikipedia lookup, or search links.
+
+Web API endpoints:
+
+- `GET /api/health` returns a basic health status.
+- `POST /api/chat` accepts JSON such as `{"message":"hello Nova"}`. Input is limited to 1,000 characters.
+
+### Deploy to Render Free
+
+The root `render.yaml` defines a single Free Python web service. Render's Free service can spin down after inactivity and may take a short time to respond when it wakes. Free instances have platform limits; see [Render's Free plan details](https://render.com/docs/free). Follow these steps:
+
+1. Push this repository and its web-app files to the GitHub repository you want to deploy. Do not add `.env`; `.gitignore` excludes it.
+2. Sign in to [Render](https://dashboard.render.com/) and select **New → Blueprint**.
+3. Connect `shoaib1229/Voice_recognition` (or select the repository containing this project), then choose the branch containing the web app and `render.yaml`.
+4. Review the Blueprint. Confirm the service plan is **Free** and create/apply it. The service uses `pip install -r requirements-web.txt`, starts Uvicorn on `0.0.0.0:$PORT`, and checks `/api/health`.
+5. No AI provider keys or environment variables are required. To enable live weather, add `OPENWEATHER_API_KEY` in the Render service's **Environment** settings; keep the value server-side and never add it to repository files. The web app also works without it.
+6. After deployment completes, open the generated `https://<service-name>.onrender.com` URL and verify the page and `/api/health` endpoint.
+
+Render requires web services to bind on `0.0.0.0` and recommends the `PORT` environment variable; this project follows that convention. See [Render Web Services](https://render.com/docs/web-services) and [Render Blueprints](https://render.com/docs/infrastructure-as-code).
+
+### Web tests
+
+The web route tests exercise health, chat, invalid input, and sanitized internal errors without opening local sockets or requiring an extra HTTP test-client package:
+
+```powershell
+python -m pip install pytest
+python -m pytest tests/test_webapp.py -q
+python -m pytest -q
+```
