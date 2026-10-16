@@ -1,0 +1,27 @@
+# ============================================================
+# Nova — Alexa-Style Desktop Voice Assistant
+# Requirements
+# ============================================================
+
+# --- Speech Recognition ---
+SpeechRecognition>=3.10.0
+PyAudio>=0.2.14
+
+# --- Text-to-Speech ---
+pyttsx3>=2.90
+
+# --- HTTP / REST APIs ---
+requests>=2.31.0
+
+# --- Configuration ---
+python-dotenv>=1.0.0
+
+# --- GUI (Phase 10) ---
+customtkinter>=5.2.0
+
+# --- Testing ---
+pytest>=7.4.0
+pytest-mock>=3.12.0
+
+# --- Distribution / Packaging ---
+pyinstaller>=6.0.0
