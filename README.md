@@ -1,4 +1,8 @@
-# Nova — Desktop Voice Assistant
+**Nova — Desktop Voice Assistant | Python, FastAPI, Speech Recognition**
+- Developed a voice assistant with browser-based voice input, speech synthesis, and a responsive chat interface.
+- Implemented voice commands, web search, Wikipedia lookups, and optional weather integration.
+- **Live Demo:** https://nova-voice-assistant-0fbg.onrender.com/
+- **GitHub:** https://github.com/shoaib1229/Voice_recognition
 
 > **Browser app:** This repository also includes a separate FastAPI web interface. The desktop application remains available through `app.py`; web deployment does not expose the desktop command registry or local computer controls.
 
